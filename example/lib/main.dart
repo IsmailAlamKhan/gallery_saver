@@ -37,8 +37,7 @@ class _MyAppState extends State<MyApp> {
                 flex: 1,
                 child: Container(
                   child: SizedBox.expand(
-                    child: RaisedButton(
-                      color: Colors.blue,
+                    child: ElevatedButton(
                       onPressed: _takePhoto,
                       child: Text(firstButtonText,
                           style: TextStyle(
@@ -51,8 +50,10 @@ class _MyAppState extends State<MyApp> {
               Flexible(
                 child: Container(
                     child: SizedBox.expand(
-                  child: RaisedButton(
-                    color: Colors.white,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                    ),
                     onPressed: _recordVideo,
                     child: Text(secondButtonText,
                         style: TextStyle(
@@ -69,8 +70,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _takePhoto() async {
-    ImagePicker.pickImage(source: ImageSource.camera)
-        .then((File recordedImage) {
+    ImagePicker().getImage(source: ImageSource.camera).then((recordedImage) {
       if (recordedImage != null && recordedImage.path != null) {
         setState(() {
           firstButtonText = 'saving in progress...';
@@ -86,8 +86,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _recordVideo() async {
-    ImagePicker.pickVideo(source: ImageSource.camera)
-        .then((File recordedVideo) {
+    ImagePicker().getImage(source: ImageSource.camera).then((recordedVideo) {
       if (recordedVideo != null && recordedVideo.path != null) {
         setState(() {
           secondButtonText = 'saving in progress...';
@@ -142,8 +141,10 @@ class _ScreenshotWidgetState extends State<ScreenshotWidget> {
         key: _globalKey,
         child: Container(
           child: SizedBox.expand(
-            child: RaisedButton(
-              color: Colors.pink,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.pink,
+              ),
               onPressed: _saveScreenshot,
               child: Text(screenshotButtonText,
                   style: TextStyle(fontSize: textSize, color: Colors.white)),
@@ -174,11 +175,10 @@ class _ScreenshotWidgetState extends State<ScreenshotWidget> {
       await capturedFile.writeAsBytes(pngBytes);
       print(capturedFile.path);
 
-      await GallerySaver.saveImage(capturedFile.path)
-          .then((value) {
-            setState(() {
-              screenshotButtonText = 'screenshot saved!';
-            });
+      await GallerySaver.saveImage(capturedFile.path).then((value) {
+        setState(() {
+          screenshotButtonText = 'screenshot saved!';
+        });
       });
     } catch (e) {
       print(e);
